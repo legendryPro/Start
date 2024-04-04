@@ -11,11 +11,18 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y php7.4 php7.4-cli php7.4-mysql php7.4-curl php7.4-zip php7.4-gd php7.4-mbstring php7.4-xml mariadb-server
 
-# Download and install PufferPanel
-RUN curl -L https://git.io/pufferpanel | bash
+# Download PufferPanel installation script
+RUN curl -L -o pufferpanel_installer.sh https://git.io/pufferpanel_install
+
+# Make the installation script executable
+RUN chmod +x pufferpanel_installer.sh
+
+# Run the installation script
+RUN ./pufferpanel_installer.sh
 
 # Expose ports
 EXPOSE 8080
 
 # Start PufferPanel
 CMD ["/pufferpanel/bin/pufferpanel", "start"]
+
