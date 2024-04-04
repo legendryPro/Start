@@ -17,13 +17,11 @@ RUN curl -L -o pufferpanel_installer.sh https://raw.githubusercontent.com/Puffer
 # Make the installation script executable
 RUN chmod +x pufferpanel_installer.sh
 
-# Run the installation script
-RUN ./pufferpanel_installer.sh
+# Run the installation script using bash
+RUN bash pufferpanel_installer.sh
 
 # Expose ports
 EXPOSE 8080
 
 # Start PufferPanel
 CMD ["/pufferpanel/bin/pufferpanel", "start"]
-
-
