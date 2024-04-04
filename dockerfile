@@ -11,17 +11,24 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y php7.4 php7.4-cli php7.4-mysql php7.4-curl php7.4-zip php7.4-gd php7.4-mbstring php7.4-xml mariadb-server
 
-# Download PufferPanel installation script
-RUN curl -L -o pufferpanel_installer.sh https://raw.githubusercontent.com/PufferPanel/pufferpanel-installer/master/pufferpanel-installer.sh
+# Download PufferPanel
+RUN curl -L -o PufferPanel.zip https://github.com/PufferPanel/PufferPanel/releases/download/v2.1.2/pufferpanel.zip && \
+    unzip PufferPanel.zip -d /opt/pufferpanel && \
+    rm PufferPanel.zip
 
-# Make the installation script executable
-RUN chmod +x pufferpanel_installer.sh
+# Install PufferPanel dependencies
+RUN apt-get install -y openjdk-8-jre-headless
 
-# Run the installation script using bash
-RUN bash pufferpanel_installer.sh
+# Configure PufferPanel with email, password, and username
+RUN sed -i 's/@@_EMAIL_@@/manitnv840@gmail.com/g' /opt/pufferpanel/config.conf && \
+    sed -i 's/@@_PASSWORD_@@/SUNsun7878@7878/g' /opt/pufferpanel/config.conf && \
+    /opt/pufferpanel/bin/pufferpanel user add Legend --email manitnv840@gmail.com --password SUNsun7878@7878
 
-# Expose ports
+# Add port 8080
+RUN /opt/pufferpanel/bin/pufferpanel port add 8080
+
+# Expose port 8080
 EXPOSE 8080
 
 # Start PufferPanel
-CMD ["/pufferpanel/bin/pufferpanel", "start"]
+CMD ["/opt/pufferpanel/bin/pufferpanel", "start"]
