@@ -4,14 +4,11 @@ FROM ubuntu:latest
 # Set the working directory
 WORKDIR /app
 
-# Copy PufferPanel installation script and Docker entry script
-COPY install_pufferpanel.sh /app
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y wget
 
-# Run PufferPanel installation script
-RUN ./install_pufferpanel.sh
+# Download and run PufferPanel installation script
+RUN wget -qO - https://get.pufferpanel.com | bash
 
-# Expose the ports required by PufferPanel
-EXPOSE 80 25565
-
-# Command to start PufferPanel
-CMD ["pufferpanel", "start"]
+# Expose port 8080 for PufferPanel
+EXPOSE 8080
